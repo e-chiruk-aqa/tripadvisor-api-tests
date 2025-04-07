@@ -31,8 +31,7 @@ jobs:
       working-directory: TripadvisorApiAutomation
 
     - name: Replace RapidAPI key in appsettings.Release.json
-      run: |
-        sed -i "s|replace-at-runtime|${{ secrets.RAPIDAPI_KEY }}|g" TripadvisorApiFramework/appsettings.Release.json
+      run: sed -i "s|replace-at-runtime|${{ env.RAPIDAPI_KEY }}|g" TripadvisorApiFramework/appsettings.Release.json
       working-directory: TripadvisorApiAutomation
 
     - name: Run tests
