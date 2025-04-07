@@ -23,17 +23,21 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore 
+      working-directory: TripadvisorApiAutomation
 
     - name: Build project
       run: dotnet build --no-restore --configuration Release
+      working-directory: TripadvisorApiAutomation
 
     - name: Replace RapidAPI key in appsettings.Release.json
       run: |
         sed -i "s|<RapidApiKey>|${{ env.RAPIDAPI_KEY }}|g" **/appsettings.Release.json
+      working-directory: TripadvisorApiAutomation
 
     - name: Run tests
       run: dotnet test --no-build --configuration Release --logger "trx;LogFileName=test_results.trx"
+      working-directory: TripadvisorApiAutomation
 
     - name: Upload test logs
       if: always()
