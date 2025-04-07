@@ -7,7 +7,7 @@ namespace TripadvisorApiTests
     public class CruisesTests : BaseTest
     {
 
-        [TestCase("Caribbean")]
+        [TestCase("Alaska")]
         public async Task PrintCruisesSortedByCrewCount(string destinationName)
         {
             var cruisesLocations = await TripadvisorApiClient.GetCruisesLocationsAsync();
