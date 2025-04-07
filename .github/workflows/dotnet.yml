@@ -28,8 +28,15 @@ jobs:
       working-directory: TripadvisorApiAutomation
 
     - name: Replace RapidAPI key in appsettings.Release.json
-      run: sed -i "s|${RAPIDAPI_KEY}|${{ env.RAPIDAPI_KEY }}|g" TripadvisorApiFramework/appsettings.Release.json
-      working-directory: TripadvisorApiAutomation
+      uses: richardrigutins/replace-in-files@v2
+      with:
+        files: 'TripadvisorApiAutomation/TripadvisorApiFramework/appsettings.Release.json'
+        search-text: '${RAPIDAPI_KEY}'
+        replacement-text: '${{ env.RAPIDAPI_KEY }}'
+
+    # - name: Replace RapidAPI key in appsettings.Release.json
+    #   run: sed -i "s|${RAPIDAPI_KEY}|${{ env.RAPIDAPI_KEY }}|g" TripadvisorApiFramework/appsettings.Release.json
+    #   working-directory: TripadvisorApiAutomation
 
     - name: Build project
       run: dotnet build --no-restore --configuration Release
