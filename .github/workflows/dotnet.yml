@@ -27,12 +27,12 @@ jobs:
       run: dotnet restore 
       working-directory: TripadvisorApiAutomation
 
-    - name: Build project
-      run: dotnet build --no-restore --configuration Release
-      working-directory: TripadvisorApiAutomation
-
     - name: Replace RapidAPI key in appsettings.Release.json
       run: sed -i "s|${RAPIDAPI_KEY}|${{ env.RAPIDAPI_KEY }}|g" TripadvisorApiFramework/appsettings.Release.json
+      working-directory: TripadvisorApiAutomation
+
+    - name: Build project
+      run: dotnet build --no-restore --configuration Release
       working-directory: TripadvisorApiAutomation
 
     - name: Run tests
