@@ -8,7 +8,7 @@ namespace TripadvisorApiTests
     {
 
         [TestCase("Caribbean")]
-        public async Task PrintCaribbeanCruisesSortedByCrewCount(string destinationName)
+        public async Task PrintCruisesSortedByCrewCount(string destinationName)
         {
             var cruisesLocations = await TripadvisorApiClient.GetCruisesLocationsAsync();
 
@@ -27,6 +27,9 @@ namespace TripadvisorApiTests
                 DestinationId = destination.DestinationId.ToString(),
                 Order = "popularity"
             });
+
+            Assert.That(cruisesLocations.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(cruisesLocations.Data?.Status, Is.True);
 
             var sorted = cruisesResponse.Data?.Data.List
                 .Where(c => c.Ship?.CrewCount > 0)
