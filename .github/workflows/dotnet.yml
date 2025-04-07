@@ -32,7 +32,7 @@ jobs:
 
     - name: Replace RapidAPI key in appsettings.Release.json
       run: |
-        sed -i "s|<RapidApiKey>|${{ env.RAPIDAPI_KEY }}|g" **/appsettings.Release.json
+        sed -i "s|replace-at-runtime|${{ secrets.RAPIDAPI_KEY }}|g" TripadvisorApiFramework/appsettings.Release.json
       working-directory: TripadvisorApiAutomation
 
     - name: Run tests
