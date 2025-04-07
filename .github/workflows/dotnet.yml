@@ -1,7 +1,4 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
-name: .NET
+name: .NET API Automation Tests
 
 on:
   push:
@@ -9,20 +6,45 @@ on:
   pull_request:
     branches: [ "main" ]
 
-jobs:
-  build:
+env:
+  RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
 
+jobs:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+
+    - name: Build project
+      run: dotnet build --no-restore --configuration Release
+
+    - name: Replace RapidAPI key in appsettings.Release.json
+      run: |
+        sed -i "s|<RapidApiKey>|${{ env.RAPIDAPI_KEY }}|g" **/appsettings.Release.json
+
+    - name: Run tests
+      run: dotnet test --no-build --configuration Release --logger "trx;LogFileName=test_results.trx"
+
+    - name: Upload test logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-logs
+        path: '**/*.log'
+
+    - name: Upload test results (TRX)
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: '**/TestResults/*.trx'
