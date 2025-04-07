@@ -1,0 +1,12 @@
+{
+  "BaseConfigurations": {
+    "Timeout": 10000
+  },
+  "TripadvisorApiOptions": {
+    "BaseUrl": "https://tripadvisor16.p.rapidapi.com/api/v1",
+    "DefaultRequestHeaders": {
+      "ApiKey": "((RapidApiKey))",
+      "ApiHost": "tripadvisor16.p.rapidapi.com"
+    }
+  }
+}
