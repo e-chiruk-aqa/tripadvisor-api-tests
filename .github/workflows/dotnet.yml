@@ -8,7 +8,7 @@ on:
     
 
 env:
-  RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+  RAPIDAPI_KEY: ${{ vars.RAPIDAPI_KEY }}
 
 jobs:
   build-and-test:
