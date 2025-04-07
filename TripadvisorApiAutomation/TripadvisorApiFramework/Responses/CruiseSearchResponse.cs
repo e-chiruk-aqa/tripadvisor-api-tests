@@ -31,8 +31,8 @@ namespace TripadvisorApiFramework.Responses
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("crewCount")]
-        public int CrewCount { get; set; }
+        [JsonProperty("crew")]
+        public int Crew { get; set; }
     }
 
     public class Destination
