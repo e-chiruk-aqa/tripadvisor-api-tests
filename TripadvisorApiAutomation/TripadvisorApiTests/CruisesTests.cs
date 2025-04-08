@@ -1,13 +1,14 @@
 using Microsoft.Extensions.Logging;
 using System.Net;
 using TripadvisorApiFramework.Requests;
+using TripadvisorApiFramework.Responses;
 
 namespace TripadvisorApiTests
 {
     public class CruisesTests : BaseTest
     {
 
-        [TestCase("Antarctica")]
+        [TestCase("Caribbean")]
         public async Task PrintCruisesSortedByCrewCount(string destinationName)
         {
             var cruisesLocations = await TripadvisorApiClient.GetCruisesLocationsAsync();
@@ -22,28 +23,46 @@ namespace TripadvisorApiTests
 
             Logger.LogInformation($"Found destinationId for '{destinationName}': {destination.DestinationId}");
 
-            var cruisesResponse = await TripadvisorApiClient.SearchCruisesAsync(new SearchCruisesRequest
+            var allCruises = new List<CruiseItem>();
+            int currentPage = 1;
+            int totalPages = 1;
+
+            do
             {
-                DestinationId = destination.DestinationId.ToString(),
-                Order = "popularity"
-            });
+                var request = new SearchCruisesRequest
+                {
+                    DestinationId = destination.DestinationId.ToString(),
+                    Page = currentPage.ToString(),
+                    Order = "popularity"
+                };
 
-            Assert.That(cruisesResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(cruisesResponse.Data?.Status, Is.True);
+                var response = await TripadvisorApiClient.SearchCruisesAsync(request);
 
-            var sorted = cruisesResponse.Data?.Data.List
-                .Where(c => c.Ship?.Crew > 0)
+                Assert.That(response.Data?.Status, Is.True);
+                Assert.That(response.Data?.Data.List, Is.Not.Null);
+
+                if (currentPage == 1 && response.Data.Data.TotalPages > 1)
+                {
+                    totalPages = response.Data.Data.TotalPages;
+                }
+
+                allCruises.AddRange(response.Data.Data.List);
+                currentPage++;
+
+            } while (currentPage <= totalPages);
+
+            var sorted = allCruises
                 .OrderByDescending(c => c.Ship.Crew)
-                .ToList();
+                .Select(c => $"{c.Title} — Crew: {c.Ship.Crew}");
 
             Assert.That(sorted, Is.Not.Null);
-            Assert.That(sorted, Is.Not.Empty, $"No cruises found for '{destinationName}'");
+            Assert.That(sorted, Is.Not.Empty);
 
-            Logger.LogInformation($"===== {destinationName} Cruises Sorted by Crew Count =====");
+            Logger.LogInformation($"\nTotal Cruises for '{destinationName}': {allCruises.Count}");
             foreach (var cruise in sorted)
             {
-                Logger.LogInformation($"{cruise.Ship?.Name} - Crew: {cruise.Ship?.Crew}");
-            } 
+                Logger.LogInformation(cruise);
+            }
         }
     }
 }

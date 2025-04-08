@@ -10,6 +10,12 @@ namespace TripadvisorApiFramework.Responses
 
     public class CruiseSearchData
     {
+        [JsonProperty("totalPages")]
+        public int TotalPages { get; set; }
+
+        [JsonProperty("totalResults")]
+        public int TotalResults { get; set; }
+
         [JsonProperty("list")]
         public List<CruiseItem> List { get; set; }
     }
@@ -29,10 +35,10 @@ namespace TripadvisorApiFramework.Responses
     public class Ship
     {
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [JsonProperty("crew")]
-        public int Crew { get; set; }
+        public int? Crew { get; set; }
     }
 
     public class Destination

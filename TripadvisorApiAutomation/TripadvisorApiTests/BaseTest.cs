@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
 using TripadvisorApiFramework;
 using TripadvisorApiFramework.DependencyInjection;
 using TripadvisorApiTests.Extensions;
@@ -17,10 +18,10 @@ namespace TripadvisorApiTests
         public void SetUp() 
         {
             var testName = TestContext.CurrentContext.Test.MethodName;
-            var testId = TestContext.CurrentContext.Test.ID;
+            var testId = DateTime.UtcNow;
             _logFilePath = Path.Combine(
                 TestContext.CurrentContext.WorkDirectory,
-                $"{testName}#{testId}.log"
+                $"{testName}_{testId}.log"
             );
             var serviceProvider = ServiceProviderFactory
                 .ServiceCollection()
