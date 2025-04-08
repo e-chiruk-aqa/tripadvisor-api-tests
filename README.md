@@ -51,7 +51,11 @@ dotnet test
 
 You can run:
 
-- `PrintCaribbeanCruisesSortedByCrewCount` — queries cruise data and logs ships sorted by crew count.
+- `PrintCruisesSortedByCrewCount` — queries cruise data and logs ships sorted by crew count.
+
+## CI/CD
+
+[![.NET](https://github.com/e-chiruk-aqa/tripadvisor-api-tests/actions/workflows/dotnet.yml/badge.svg)](https://github.com/e-chiruk-aqa/tripadvisor-api-tests/actions/workflows/dotnet.yml)
 
 ## 📁 Logs & Attachments
 
