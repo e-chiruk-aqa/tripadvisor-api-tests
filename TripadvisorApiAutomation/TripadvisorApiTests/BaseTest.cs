@@ -18,10 +18,9 @@ namespace TripadvisorApiTests
         public void SetUp() 
         {
             var testName = TestContext.CurrentContext.Test.MethodName;
-            var testId = DateTime.UtcNow;
             _logFilePath = Path.Combine(
                 TestContext.CurrentContext.WorkDirectory,
-                $"{testName}_{testId}.log"
+                $"{testName}#{DateTime.Now.ToFileTime()}.log"
             );
             var serviceProvider = ServiceProviderFactory
                 .ServiceCollection()
